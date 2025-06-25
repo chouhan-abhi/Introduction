@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../App.css';
 
 function ToDo() {
   const [tasks, setTasks] = useState(() => {
@@ -46,7 +47,8 @@ function ToDo() {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '500px', margin: 'auto', fontFamily: 'Arial' }}>
+    <div className='app-container' style={{ padding: '20px', maxWidth: '500px', margin: 'auto', fontFamily: 'Arial' }}>
+      <h3>To-Do List</h3>
       <div style={{ display: 'flex', gap: '10px' }}>
         <input
           type="text"

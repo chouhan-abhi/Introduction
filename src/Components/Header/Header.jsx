@@ -34,17 +34,19 @@ function Header() {
 
     return (<>
         <header className="header">
-            <h1>{text}</h1>
-
+            <h1>{text}_</h1>
         </header>
+        <>
         <label className="toggle-switch">
             <input
                 type="checkbox"
                 checked={darkMode}
                 onChange={() => setDarkMode(!darkMode)}
             />
-            <span className="slider" />
+            <span className="slider"/>
         </label>
+        <div onClick={() => window.location.href = '/'}>Home</div>
+        </>
     </>
     );
 }

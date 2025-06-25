@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { diffLines, diffWords } from 'diff';
+import '../App.css';
 
 function GitHubStyleDiff({ oldText, newText, mode }) {
   const diff = mode === 'words' ? diffWords(oldText, newText) : diffLines(oldText, newText);
@@ -27,10 +28,11 @@ const DiffEditor = () => {
   const [mode, setMode] = useState('words');
 
   return (
-    <div className="App" style={{ padding: '20px', fontFamily: 'Arial' }}>
+    <div className="app-container" style={{ padding: '20px', fontFamily: 'Arial' }}>
+      <h2>Difference Editor</h2>
       <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
         <div style={{ flex: 1 }}>
-          <h4>Original Text</h4>
+          <b>Original Text</b>
           <textarea
             rows="10"
             style={{ width: '100%' }}
@@ -40,7 +42,7 @@ const DiffEditor = () => {
           />
         </div>
         <div style={{ flex: 1 }}>
-          <h4>Modified Text</h4>
+          <b>Modified Text</b>
           <textarea
             rows="10"
             style={{ width: '100%' }}
