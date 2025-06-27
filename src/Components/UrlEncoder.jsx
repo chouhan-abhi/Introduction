@@ -22,7 +22,7 @@ const UrlEncoderDecoder = () => {
   };
 
   return (
-    <div className='app-container' style={{ maxWidth: 600, margin: '0 auto', padding: 20 }}>
+    <div className='app-container'>
       <h2>URL Encoder / Decoder</h2>
       <textarea
         rows="4"

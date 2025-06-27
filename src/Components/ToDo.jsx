@@ -47,7 +47,7 @@ function ToDo() {
   };
 
   return (
-    <div className='app-container' style={{ padding: '20px', maxWidth: '500px', margin: 'auto', fontFamily: 'Arial' }}>
+    <div className='app-container'>
       <h3>To-Do List</h3>
       <div style={{ display: 'flex', gap: '10px' }}>
         <input
@@ -72,6 +72,7 @@ function ToDo() {
               background: '#f9f9f9',
               padding: '10px',
               borderRadius: '5px',
+              boxShadow: '0 8px 128px var(--shadow-color)'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

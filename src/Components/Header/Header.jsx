@@ -1,54 +1,70 @@
 import React, { useEffect, useState } from 'react';
 import './Header.css';
+import AppContainer from '../AppContainer';
 
 const greetings = ['Hello', 'Hola', 'Bonjour', 'नमस्ते', 'こんにちは', 'Ciao', 'Olá'];
 
-function Header() {
+const Title = () => {
     const [text, setText] = useState('');
     const [index, setIndex] = useState(0);
-    const [char, setChar] = useState(0);
-    const [darkMode, setDarkMode] = useState(() => {
-        return localStorage.getItem('theme') === 'dark';
-    });
+    const [charIndex, setCharIndex] = useState(0);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            const current = greetings[index];
-            if (char < current.length) {
-                setText(current.slice(0, char + 1));
-                setChar(char + 1);
-            } else {
-                setTimeout(() => {
-                    setChar(0);
-                    setIndex((index + 1) % greetings.length);
-                }, 1000);
-            }
-        }, 150);
-        return () => clearInterval(interval);
-    }, [char, index]);
+        let timeout;
+
+        const currentGreeting = greetings[index];
+
+        if (charIndex < currentGreeting.length) {
+            timeout = setTimeout(() => {
+                setText(currentGreeting.slice(0, charIndex + 1));
+                setCharIndex(charIndex + 1);
+            }, 150);
+        } else {
+            timeout = setTimeout(() => {
+                setCharIndex(0);
+                setIndex((index + 1) % greetings.length);
+            }, 1000);
+        }
+
+        return () => clearTimeout(timeout);
+    }, [charIndex, index]);
+
+    return (
+        <header className="header">
+            {text}_
+        </header>
+    );
+};
+
+const Header = ({ setSideApp }) => {
+    const [darkMode, setDarkMode] = useState(() => localStorage.getItem('theme') === 'dark');
+    const [showAppSelector, setShowAppSelector] = useState(false);
 
     useEffect(() => {
         document.body.className = darkMode ? 'dark' : '';
         localStorage.setItem('theme', darkMode ? 'dark' : 'light');
     }, [darkMode]);
 
-    return (<>
-        <header className="header">
-            <h1>{text}_</h1>
-        </header>
-        <>
-        <label className="toggle-switch">
-            <input
-                type="checkbox"
-                checked={darkMode}
-                onChange={() => setDarkMode(!darkMode)}
-            />
-            <span className="slider"/>
-        </label>
-        <div onClick={() => window.location.href = '/'}>Home</div>
-        </>
-    </>
-    );
-}
+    const toggleTheme = () => setDarkMode(prev => !prev);
 
-export default Header;
+    return (
+        <>
+            <Title />
+            <label className="toggle-switch" aria-label="Toggle Dark Mode">
+                <input
+                    type="checkbox"
+                    checked={darkMode}
+                    onChange={toggleTheme}
+                />
+                <span className="slider" />
+            </label>
+            <nav className="nav-links">
+                <div onClick={() => window.location.href = '/'}>Home</div>
+                <div className='app-drawer' onClick={() => setShowAppSelector(prev => !prev)}>Apps {showAppSelector ? '-' : null}</div>
+            </nav>
+            {showAppSelector ? (<div className='app-selector'><AppContainer type="drawer" setSideApp={setSideApp} /></div>) : null}
+        </>
+    );
+};
+
+export { Header, Title };

@@ -28,7 +28,12 @@ body.dark {
   --shadow-color: rgba(86, 86, 86, 0.32);
 }
 
-input, textarea {
+.app-layout {
+  margin: 2vw;
+}
+
+input,
+textarea {
   background-color: var(--input-background);
   border: none;
   padding: 8px;
@@ -68,7 +73,6 @@ input, textarea {
 
 .tile-container {
   height: 64vh;
-  width: 64vw;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
@@ -99,16 +103,40 @@ input, textarea {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
-a:hover, a:visited, a:link, a:active {
+a:hover,
+a:visited,
+a:link,
+a:active {
   text-decoration: none;
   color: var(--text-color)
 }
 
 .app-container {
+  flex: 1;
   border: 1px solid var(--shadow-color);
   backdrop-filter: blur(8px);
   margin: 8px 24px;
   border-radius: 8px;
-  min-height: 64vh;
+  min-height: 72vh;
   padding: 8px;
+  box-shadow: 0 8px 32px var(--shadow-color);
+}
+
+.playground {
+  display: flex;
+  flex-direction: row;
+  gap: 16px
+  /* Default for larger screens */
+}
+
+@media (max-width: 960px) {
+  .playground {
+    flex-direction: column;
+  }
+}
+
+button {
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--shadow-color);
 }

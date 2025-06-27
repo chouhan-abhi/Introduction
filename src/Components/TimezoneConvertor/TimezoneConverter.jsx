@@ -18,7 +18,7 @@ function TimezoneConverter() {
   };
   
   return (
-      <div className='app-container' style={{ display: 'flex', flexDirection: 'column', gap: '10px', margin: '20px' }}>
+      <div className='app-container'>
         <h3>Timezone Convertor</h3>
         <input
           type="datetime-local"

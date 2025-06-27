@@ -1,6 +1,6 @@
 .header {
   height: 100px;
-  width:90%;
+  width: 90%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,20 +17,25 @@
   width: 50px;
   height: 24px;
 }
+
 .toggle-switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
+
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0;
-  right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #ccc;
   border-radius: 24px;
   transition: 0.4s;
 }
+
 .slider:before {
   position: absolute;
   content: "";
@@ -42,9 +47,27 @@
   border-radius: 50%;
   transition: 0.4s;
 }
-input:checked + .slider {
+
+input:checked+.slider {
   background-color: #2196F3;
 }
-input:checked + .slider:before {
+
+input:checked+.slider:before {
   transform: translateX(26px);
+}
+
+.app-selector {
+  position: fixed;
+  z-index: 10;
+  border-radius: 6px;
+  border: 1px solid var(--shadow-color);
+  width: 40vh;
+  right: 16px;
+  top: 10vh;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px var(--shadow-color);
+}
+
+.app-drawer {
+  pointer-events: all;
 }

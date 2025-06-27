@@ -9,9 +9,11 @@
     "@testing-library/user-event": "^13.5.0",
     "diff": "^8.0.2",
     "framer-motion": "^12.18.1",
+    "json-viewer-js": "^1.0.8",
     "luxon": "^3.6.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-json-tree": "^0.20.0",
     "react-router-dom": "^7.6.2",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"

@@ -1,90 +1,59 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import './App.css';
 import AboutMe from './Components/AboutMe/AboutMe';
-import Header from './Components/Header/Header';
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
-import UrlEncoderDecoder from './Components/UrlEncoder';
+import { Header } from './Components/Header/Header';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import AppContainer from './Components/AppContainer';
 
 const DiffEditor = lazy(() => import('./Components/DiffEditor'));
 const ToDo = lazy(() => import('./Components/ToDo'));
 const TimezoneConverter = lazy(() => import('./Components/TimezoneConvertor/TimezoneConverter'));
 const SvgEditor = lazy(() => import('./Components/SvgEditor'));
+const UrlEncoderDecoder = lazy(() => import('./Components/UrlEncoder'));
+const JsonViewer = lazy(() => import('./Components/JsonViewer'));
 
-
-const Tile = ({ icon, title, path }) => (
-  <Link to={path} className='tile'>
-    {icon || '？'}
-    <div>{title || 'title'}</div>
-  </Link>
-)
-
-const APPS_MAP = [
-  {
-    icon: '🧠',
-    title: 'Diff Editor',
-    path: '/difference-editor'
-  },
-  {
-    icon: '✅',
-    title: 'To-Do List',
-    path: '/todo'
-  },
-  {
-    icon: '🕐',
-    title: 'Timezone convertor',
-    path: '/timezone-convertor'
-  },
-  {
-    icon: '📝',
-    title: 'SVG Editor',
-    path: '/svg-editor'
-  },
-  {
-    icon: 'ȶ',
-    title: 'URL Encoder',
-    path: '/url-encoder'
-  },
-  {
-    icon: '📝',
-    title: 'Dummy Tile',
-    path: '/'
-  },
-]
-
-const AppHome = () => (
-  <div className='main-content tile-container'>
-    {APPS_MAP.map(({ icon, title, path }) => <Tile icon={icon} title={title} path={path} />)}
-  </div>
-)
+const APP_MAP = {
+  'DiffEditor': <DiffEditor />,
+  'ToDo': <ToDo />,
+  'TimezoneConverter': <TimezoneConverter />,
+  'SvgEditor': <SvgEditor />,
+  'UrlEncoderDecoder': <UrlEncoderDecoder />,
+  'JsonViewer': <JsonViewer />,
+}
 
 const AppRoutes = () => {
   return (
     <Suspense fallback={<div className="loading">Loading</div>}>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' Component={AppHome} />
-          <Route path='/difference-editor' Component={DiffEditor} />
-          <Route path='/todo' Component={ToDo} />
-          <Route path='/timezone-convertor' Component={TimezoneConverter} />
-          <Route path='/svg-editor' Component={SvgEditor} />
-          <Route path='/url-encoder' Component={UrlEncoderDecoder} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path='/' Component={AppContainer} />
+        <Route path='/difference-editor' Component={DiffEditor} />
+        <Route path='/todo' Component={ToDo} />
+        <Route path='/timezone-convertor' Component={TimezoneConverter} />
+        <Route path='/svg-editor' Component={SvgEditor} />
+        <Route path='/url-encoder' Component={UrlEncoderDecoder} />
+        <Route path='/json-viewer' Component={JsonViewer} />
+      </Routes>
     </Suspense >
   );
 }
 
 function App() {
+  const [sideApp, setSideApp] = useState(null);
+  console.log(sideApp);
   return (
-    <div className="app-layout">
-      <div className="main-content">
-        <Header />
+    <BrowserRouter>
+      <div className="app-layout">
+        <div className="main-content">
+          <Header setSideApp={setSideApp} />
+        </div>
+        <div className='playground'>
+          <AppRoutes />
+          {sideApp ? APP_MAP[sideApp] : null}
+        </div>
       </div>
-      <AppRoutes />
-    </div>
+      {/* <AboutMe /> */}
+    </BrowserRouter>
   );
 }
 
 export default App;
-
-// {/* <AboutMe /> */ }

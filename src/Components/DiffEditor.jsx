@@ -28,7 +28,7 @@ const DiffEditor = () => {
   const [mode, setMode] = useState('words');
 
   return (
-    <div className="app-container" style={{ padding: '20px', fontFamily: 'Arial' }}>
+    <div className="app-container">
       <h2>Difference Editor</h2>
       <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
         <div style={{ flex: 1 }}>
