@@ -1,18 +1,115 @@
-# Welcome to My Experimental Portfolio!
+# 🧩 DevKit - Modular React Tab App
 
-This website is a creative experiment built primarily with the help of AI (ChatGPT). It serves as a personal exploration into the capabilities of artificial intelligence—how well it understands feedback, adapts to evolving ideas, and supports the development process.
+Hi! This is a tab-based modular React application I built to dynamically load and manage multiple apps inside a single interface. The architecture is designed to be plug-and-play, so I can easily add or remove apps without touching the core logic.
 
-## Purpose of the Project
+👉 **[Experience it live at devkit.surge.sh](http://devkit.surge.sh)**
 
-The goal of this project is twofold:
+## 🚀 What I Built
 
-- **To test how much I can rely on AI for building and iterating on real-world applications.**
-- **To create a centralized hub for useful tools that developers often need to solve, track, or simplify everyday tasks.**
+* 🧠 **Dynamic App Loading** using `React.lazy` and `Suspense`
+* 🗂️ **Tabbed Interface** that supports multiple open apps
+* 💾 **Persistent Tabs** with `localStorage` so open tabs stick around after refresh
+* 🧱 **Modular Architecture** so adding a new app is just a few lines of code
+* 🌐 **Tile-Based App Selector** with support for external links
 
-## Ongoing Updates
+## 📂 Project Structure
 
-As I continue to learn and grow, this site will evolve with me. I’ll be regularly updating it with new tools, features, and insights from my journey as a Computer Science engineer.
+Here's how I organized the project:
 
-Stay tuned and feel free to explore the tools and experiments I’ve built so far!
+```
+src/
+├── App.js               # Main application logic and routing
+├── App.css              # Styles for layout and UI
+├── Components/
+│   ├── Header/          # Tab bar at the top
+│   ├── Footer/          # Footer showing active tab title
+├── Utils/
+│   ├── constants.js     # App definitions and initial tab state
+│   ├── utility.js       # Utility functions like app list generator
+```
 
-You can try out this site at [chouhan-abhi](https://chouhan-abhi.github.io).
+## 🧱 How It Works
+
+### 🔄 Dynamic Component Loading
+
+When I select a tile, the app component is loaded lazily using React’s `lazy()`:
+
+```js
+React.lazy(APPS[activeTab.appId].loader)
+```
+
+This means apps aren't loaded until I need them, keeping performance smooth.
+
+### 🧭 Tab Management
+
+I used React state and `localStorage` to manage the open tabs and which one is active:
+
+```js
+useEffect(() => {
+  localStorage.setItem("tabs", JSON.stringify(tabs));
+  localStorage.setItem("activeTabId", JSON.stringify(activeTabId));
+}, [tabs, activeTabId]);
+```
+
+Tabs persist across browser refreshes.
+
+### 🧩 App Selector
+
+The tile interface lets me pick from a list of available apps or links. If the tile includes a URL, it opens in a new tab; otherwise, it loads inside the interface.
+
+## 💻 Try It Yourself
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Start the development server
+
+```bash
+npm start
+```
+
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
+
+Or skip all that and visit: **[http://devkit.surge.sh](http://devkit.surge.sh)**
+
+## ✍️ Adding a New App
+
+To plug in a new app:
+
+1. Register it in `Utils/constants.js`:
+
+```js
+export const APPS = {
+  myApp: {
+    name: "My App",
+    loader: () => import("../Apps/MyApp"),
+    icon: "path-to-icon",
+  },
+  ...
+};
+```
+
+2. Add it to the app list in `getAppList()` in `utility.js`.
+
+That’s it — it’ll show up as a tile automatically!
+
+## 🛠️ Tech Stack
+
+* React
+* React Lazy & Suspense
+* Local Storage
+* Surge (for deployment)
+
+## 📄 License
+
+MIT — feel free to use, modify, and share.

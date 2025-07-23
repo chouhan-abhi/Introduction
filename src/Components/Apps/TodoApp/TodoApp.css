@@ -225,8 +225,7 @@ textarea {
   }
 
   .todo-input-bar-container {
-    width: 60vw;
-    margin: 0 auto;
+    min-width: 60vw;
   }
 }
 
