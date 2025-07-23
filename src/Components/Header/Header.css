@@ -1,73 +1,93 @@
 .header {
-  height: 100px;
-  width: 90%;
+  height: 40px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  font-size: 2rem;
-  font-weight: bold;
-  padding: 0 20px;
-  background: transparent;
+  justify-content: center;
   color: var(--text-color);
-}
-
-/* Toggle Switch */
-.toggle-switch {
-  position: relative;
-  width: 50px;
-  height: 24px;
-}
-
-.toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
+  padding: 0 10px;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  border-radius: 24px;
-  transition: 0.4s;
+  z-index: 100;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  border-radius: 50%;
-  transition: 0.4s;
+.title {
+  font-weight: bold;
+  margin-right: 16px;
+  font-size: larger;
+  cursor: pointer;
+}
+.title:hover {
+  border-bottom: 1px solid var(--primary-color);
 }
 
-input:checked+.slider {
-  background-color: #2196F3;
+.toggle-switch {
+  margin-left: auto;
+  position: relative;
+  background-color: var(--glass-bg);
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: background-color 0.3s;
 }
 
-input:checked+.slider:before {
-  transform: translateX(26px);
-}
-
-.app-selector {
-  position: fixed;
-  z-index: 10;
-  border-radius: 6px;
-  border: 1px solid var(--shadow-color);
-  width: 40vh;
-  right: 16px;
-  top: 10vh;
-  backdrop-filter: blur(16px);
+.toggle-switch:hover {
+  background-color: var(--glass-bg);
   box-shadow: 0 8px 32px var(--shadow-color);
 }
 
-.app-drawer {
-  pointer-events: all;
+.header-content {
+  margin-left: 8px;
+  font-weight: bold;
+}
+
+.new-tab-button {
+  color: var(--text-color);
+  background-color: transparent;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: large;
+}
+.new-tab-button:hover {
+  font-size: x-large;
+}
+
+.tabs-bar {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  font-size: smaller;
+  margin-top: -2px;
+  border-radius: 25px;
+  background-color: var(--glass-bg);
+}
+
+.tab {
+  padding: 6px 10px;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tab:hover {
+  box-shadow: 0 8px 32px var(--shadow-color);
+}
+
+.tab.active {
+  background-color: var(--primary-color);
+  font-weight: bold;
+  color: #fff;
+}
+
+.close-btn {
+  margin-left: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
 }

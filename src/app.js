@@ -1,59 +1,88 @@
-import React, { Suspense, lazy, useState } from 'react';
-import './App.css';
-import AboutMe from './Components/AboutMe/AboutMe';
-import { Header } from './Components/Header/Header';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import AppContainer from './Components/AppContainer';
+import React, { useState, useEffect, useMemo, Suspense } from "react";
+import "./App.css";
+import Header from "./Components/Header/Header";
+import Footer from "./Components/Footer/Footer";
+import { APPS, INITIAL_TAB_STATE } from "./Utils/constants";
+import { getAppList } from "./Utils/utility";
 
-const DiffEditor = lazy(() => import('./Components/DiffEditor'));
-const ToDo = lazy(() => import('./Components/ToDo'));
-const TimezoneConverter = lazy(() => import('./Components/TimezoneConvertor/TimezoneConverter'));
-const SvgEditor = lazy(() => import('./Components/SvgEditor'));
-const UrlEncoderDecoder = lazy(() => import('./Components/UrlEncoder'));
-const JsonViewer = lazy(() => import('./Components/JsonViewer'));
+const Tab = ({ activeTab, updateTab }) => {
+  const AppComponent = useMemo(() => {
+    if (activeTab?.appId && APPS[activeTab.appId]?.loader) {
+      return React.lazy(APPS[activeTab.appId].loader);
+    }
+    return null;
+  }, [activeTab?.appId]);
 
-const APP_MAP = {
-  'DiffEditor': <DiffEditor />,
-  'ToDo': <ToDo />,
-  'TimezoneConverter': <TimezoneConverter />,
-  'SvgEditor': <SvgEditor />,
-  'UrlEncoderDecoder': <UrlEncoderDecoder />,
-  'JsonViewer': <JsonViewer />,
-}
-
-const AppRoutes = () => {
   return (
-    <Suspense fallback={<div className="loading">Loading</div>}>
-      <Routes>
-        <Route path='/' Component={AppContainer} />
-        <Route path='/difference-editor' Component={DiffEditor} />
-        <Route path='/todo' Component={ToDo} />
-        <Route path='/timezone-convertor' Component={TimezoneConverter} />
-        <Route path='/svg-editor' Component={SvgEditor} />
-        <Route path='/url-encoder' Component={UrlEncoderDecoder} />
-        <Route path='/json-viewer' Component={JsonViewer} />
-      </Routes>
-    </Suspense >
+    <main className="tab-content">
+      {AppComponent ? (
+        <Suspense fallback={<div className="loading">Loading app...</div>}>
+          <div className="app-container">
+            <AppComponent />
+          </div>
+        </Suspense>
+      ) : (
+        <AppSelector onAppSelect={(appId, name, link) => updateTab(activeTab.id, { appId, title: name })} />
+      )}
+    </main>
   );
-}
+};
 
-function App() {
-  const [sideApp, setSideApp] = useState(null);
-  console.log(sideApp);
+const Tile = ({ icon, name, onSelect, link }) => (
+  <div className="tile" onClick={() => link ? window.open(link, '_blank') : onSelect(name)}>
+    <img src={icon} alt={name} className="tile-icon" />
+    <div>{name || "title"}</div>
+  </div>
+);
+
+const AppSelector = ({ onAppSelect }) => {
   return (
-    <BrowserRouter>
-      <div className="app-layout">
-        <div className="main-content">
-          <Header setSideApp={setSideApp} />
-        </div>
-        <div className='playground'>
-          <AppRoutes />
-          {sideApp ? APP_MAP[sideApp] : null}
-        </div>
-      </div>
-      {/* <AboutMe /> */}
-    </BrowserRouter>
+    <div className="tile-container">
+      {getAppList().map(({ id, icon, name, link }) => (
+        <Tile
+          key={id}
+          icon={icon}
+          name={name}
+          link={link}
+          onSelect={() => onAppSelect(id, name)}
+        />
+      ))}
+    </div>
   );
-}
+};
+
+const App = () => {
+  const [tabs, setTabs] = useState(() => {
+    const savedTabs = localStorage.getItem("tabs");
+    return savedTabs ? JSON.parse(savedTabs) : [INITIAL_TAB_STATE];
+  });
+  const [activeTabId, setActiveTabId] = useState(() => {
+    const savedActiveTabId = localStorage.getItem("activeTabId");
+    return savedActiveTabId ? JSON.parse(savedActiveTabId) : 1;
+  });
+
+  const activeTab = tabs.find((tab) => tab.id === activeTabId);
+  useEffect(() => {
+    localStorage.setItem("tabs", JSON.stringify(tabs));
+    localStorage.setItem("activeTabId", JSON.stringify(activeTabId));
+  }, [tabs, activeTabId]);
+
+  const updateTab = (id, updates) => {
+    setTabs(tabs.map((tab) => (tab.id === id ? { ...tab, ...updates } : tab)));
+  };
+
+  return (
+    <div>
+      <Header
+        tabs={tabs}
+        setTabs={setTabs}
+        activeTabId={activeTabId}
+        setActiveTabId={setActiveTabId}
+      />
+      <Tab activeTab={activeTab} updateTab={updateTab} />
+      <Footer activeTabTitle={activeTab?.title} />
+    </div>
+  );
+};
 
 export default App;

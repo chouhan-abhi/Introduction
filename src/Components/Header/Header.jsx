@@ -1,70 +1,96 @@
-import React, { useEffect, useState } from 'react';
-import './Header.css';
-import AppContainer from '../AppContainer';
+import React, { useEffect, useState } from "react";
+import "./Header.css";
+import { INITIAL_TAB_STATE, MoonImage, SunImage } from "../../Utils/constants";
 
-const greetings = ['Hello', 'Hola', 'Bonjour', 'नमस्ते', 'こんにちは', 'Ciao', 'Olá'];
+function generateRandomId() {
+  return Date.now();
+}
 
-const Title = () => {
-    const [text, setText] = useState('');
-    const [index, setIndex] = useState(0);
-    const [charIndex, setCharIndex] = useState(0);
+function Header({ tabs, setTabs, activeTabId, setActiveTabId }) {
+  const [nextId, setNextId] = useState(2);
 
-    useEffect(() => {
-        let timeout;
+  const addTab = () => {
+    const newGeneratedId = generateRandomId();
+    const newTab = {
+      id: newGeneratedId,
+      title: `Tab ${nextId}`,
+      content: null,
+    };
+    setTabs((prev) => [...prev, newTab]);
+    setActiveTabId(newGeneratedId);
+    setNextId((id) => id + 1);
+  };
 
-        const currentGreeting = greetings[index];
+  const closeTab = (id) => {
+    setTabs((prevTabs) => {
+      const updated = prevTabs.filter((tab) => tab.id !== id);
+      if (id === activeTabId && updated.length > 0) {
+        setActiveTabId(updated[updated.length - 1].id);
+      }
+      if(updated.length === 0) {
+        setActiveTabId(1);
+        return [INITIAL_TAB_STATE];
+      }
+      return updated;
+    });
+  };
 
-        if (charIndex < currentGreeting.length) {
-            timeout = setTimeout(() => {
-                setText(currentGreeting.slice(0, charIndex + 1));
-                setCharIndex(charIndex + 1);
-            }, 150);
-        } else {
-            timeout = setTimeout(() => {
-                setCharIndex(0);
-                setIndex((index + 1) % greetings.length);
-            }, 1000);
-        }
+  const TabBar = () => (
+    <div className="tabs-bar">
+      {tabs.map((tab) => (
+        <div
+          key={tab.id}
+          className={`tab ${tab.id === activeTabId ? "active" : ""}`}
+          onClick={() => setActiveTabId(tab.id)}
+        >
+          {tab.title}
+          <button
+            className="close-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              closeTab(tab.id);
+            }}
+          >
+            ×
+          </button>
+        </div>
+      ))}
+      <button className="new-tab-button" onClick={addTab}>
+        +
+      </button>
+    </div>
+  );
 
-        return () => clearTimeout(timeout);
-    }, [charIndex, index]);
+  return (
+    <header className="header">
+      <span className="title" onClick={() => window.open('https://github.com/chouhan-abhi/Introduction', '_blank')}>DevKit</span>
+      <TabBar />
+      <DarkModeSwitch />
+    </header>
+  );
+}
 
-    return (
-        <header className="header">
-            {text}_
-        </header>
-    );
+// --------------------- Dark Mode Switch ---------------------
+
+const DarkModeSwitch = () => {
+  const [darkMode, setDarkMode] = useState(
+    () => localStorage.getItem("theme") === "dark"
+  );
+
+  useEffect(() => {
+    document.body.className = darkMode ? "dark" : "";
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
+
+  return (
+    <span className="header-content" onClick={() => setDarkMode(!darkMode)}>
+      <img
+        className="toggle-switch"
+        src={darkMode ? SunImage : MoonImage}
+        alt="Toggle Theme"
+      />
+    </span>
+  );
 };
 
-const Header = ({ setSideApp }) => {
-    const [darkMode, setDarkMode] = useState(() => localStorage.getItem('theme') === 'dark');
-    const [showAppSelector, setShowAppSelector] = useState(false);
-
-    useEffect(() => {
-        document.body.className = darkMode ? 'dark' : '';
-        localStorage.setItem('theme', darkMode ? 'dark' : 'light');
-    }, [darkMode]);
-
-    const toggleTheme = () => setDarkMode(prev => !prev);
-
-    return (
-        <>
-            <Title />
-            <label className="toggle-switch" aria-label="Toggle Dark Mode">
-                <input
-                    type="checkbox"
-                    checked={darkMode}
-                    onChange={toggleTheme}
-                />
-                <span className="slider" />
-            </label>
-            <nav className="nav-links">
-                <div onClick={() => window.location.href = '/'}>Home</div>
-                <div className='app-drawer' onClick={() => setShowAppSelector(prev => !prev)}>Apps {showAppSelector ? '-' : null}</div>
-            </nav>
-            {showAppSelector ? (<div className='app-selector'><AppContainer type="drawer" setSideApp={setSideApp} /></div>) : null}
-        </>
-    );
-};
-
-export { Header, Title };
+export default Header;

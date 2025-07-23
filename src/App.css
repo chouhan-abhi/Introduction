@@ -1,22 +1,24 @@
 :root {
   --bg-color: #f5f7fa;
   --text-color: #333;
-  --dot-color: rgba(0, 0, 0, 0.1);
-  /* Light mode dots */
+  --dot-color: rgba(0, 0, 0, 0.2);
   --glass-bg: rgba(255, 255, 255, 0.8);
   --input-background: #ffffff;
   --section-background: #ffffff;
-  --shadow-color: rgba(31, 38, 135, 0.2)
+  --shadow-color: rgba(31, 38, 135, 0.2);
+  --primary-color: #ff6b6b;
 }
 
 body {
   background-color: var(--bg-color);
-  background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
+  background-image: radial-gradient(circle,
+      var(--dot-color) 0px,
+      transparent 1px);
   background-size: 10px 10px;
   color: var(--text-color);
-  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  font-family: 'Poppins', sans-serif;
 }
 
 body.dark {
@@ -28,51 +30,34 @@ body.dark {
   --shadow-color: rgba(86, 86, 86, 0.32);
 }
 
-.app-layout {
-  margin: 2vw;
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-input,
-textarea {
-  background-color: var(--input-background);
-  border: none;
-  padding: 8px;
-  border-radius: 8px;
-  margin: 4px 8px 4px 0;
-}
-
-.container {
+.tab-content {
+  padding: 20px;
+  margin-top: 40px;
+  height: calc(100vh - 160px);
   display: flex;
-  height: 100vh;
+  align-items: center;
   justify-content: center;
-}
-
-.loading {
-  text-align: center;
-  padding: 20px;
-  font-style: italic;
-}
-
-.main-content {
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-  gap: 20px;
-}
-
-.loading {
-  padding: 20px;
-  font-style: italic;
-}
-
-.glass-section,
-.about-me {
-  background: var(--glass-bg);
-  color: var(--text-color);
 }
 
 .tile-container {
-  height: 64vh;
+  max-height: 64vh;
+  width: 64vw;
+  display: flex;
+  gap: 16px;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
@@ -83,11 +68,11 @@ textarea {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 120px;
-  width: 120px;
+  height: 96px;
+  width: 96px;
   background-color: var(--section-background);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px var(--shadow-color);
+  box-shadow: 0 8px 16px var(--shadow-color);
   border-radius: 8px;
   flex-direction: column;
   text-align: center;
@@ -95,48 +80,45 @@ textarea {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   transform-style: preserve-3d;
   will-change: transform;
-}
 
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.5s ease-out forwards;
+}
 
 .tile:hover {
   transform: rotateY(15deg) rotateX(10deg) scale(1.05);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  height: 100px;
+  width: 100px;
+  border-bottom: 2px solid var(--primary-color);
+  box-shadow: 0 12px 32px var(--shadow-color);
 }
 
-a:hover,
-a:visited,
-a:link,
-a:active {
-  text-decoration: none;
-  color: var(--text-color)
-}
-
-.app-container {
-  flex: 1;
-  border: 1px solid var(--shadow-color);
-  backdrop-filter: blur(8px);
-  margin: 8px 24px;
-  border-radius: 8px;
-  min-height: 72vh;
-  padding: 8px;
-  box-shadow: 0 8px 32px var(--shadow-color);
-}
-
-.playground {
-  display: flex;
-  flex-direction: row;
-  gap: 16px
-  /* Default for larger screens */
-}
-
-@media (max-width: 960px) {
-  .playground {
-    flex-direction: column;
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-button {
-  padding: 4px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--shadow-color);
+@keyframes softFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.app-container {
+  padding: 20px;
+  margin-top: 40px;
+  height: calc(100vh - 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  animation: softFadeIn 0.6s ease-out;
 }
