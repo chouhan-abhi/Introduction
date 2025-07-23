@@ -99,8 +99,6 @@ export const APPS = {
 };
 ```
 
-2. Add it to the app list in `getAppList()` in `utility.js`.
-
 That’s it — it’ll show up as a tile automatically!
 
 ## 🛠️ Tech Stack
